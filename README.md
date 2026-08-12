@@ -13,14 +13,13 @@
 
 ## 管理员：上传新素材
 
-在线管理员入口：[Upload new assets](https://arthurescc.github.io/studio-background-portfolio/upload.html)。该页面使用 GitHub 身份权限，不在网页或仓库中保存额外账号密码。
+在线管理员入口：[安全上传台](https://studio-background-upload.yxyx.chatgpt.site/)。登录已授权账号后，可直接选择或拖入一个或多个 ZIP；不在网页或仓库中保存自设密码。
 
-1. 打开仓库的 **Releases** 页面，点击 **Draft a new release**。
-2. 新建标签，例如 `batch-2026-08-stone`。
-3. 标题填写清晰的英文或中文批次名。
-4. 上传一个或多个 `.zip` 文件；单个 Release 资源文件不要超过 GitHub 的 2 GB 限制。
-5. 点击 **Publish release**。
-6. 自动化程序会读取 ZIP 中的 JPG、JPEG、PNG 和 WebP，为每张原图创建独立下载资源，再生成轻量预览图、批次目录和搜索索引，并自动更新在线图库。
+1. 打开安全上传台并登录已授权账号。
+2. 选择或拖入一个或多个 `.zip` 文件，等待显示“已进入自动处理队列”。
+3. 仓库每 5 分钟自动收取新素材包并创建 Release。
+4. 自动化程序先读取 ZIP 内的 JPG、JPEG、PNG 和 WebP 文件名，为每张图预分配固定 URL，并优先发布 Excel/CSV 清单。
+5. 随后原图、尺寸和轻量预览会载入这些已分配 URL；地址不会因处理顺序改变。
 
 建议按主题拆包，例如：
 
