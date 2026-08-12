@@ -57,7 +57,31 @@ jobs:
             --pattern '*.zip' \
             --dir /tmp/studio-release
 
-      - name: Build thumbnails and catalog
+      - name: Reserve every image URL from ZIP filenames
+        run: |
+          python tools/preallocate_urls.py \
+            --input-dir /tmp/studio-release \
+            --tag "${{ steps.release.outputs.tag }}" \
+            --repo "$GITHUB_REPOSITORY"
+          python tools/export_urls.py \
+            --catalog docs/data/catalog.json \
+            --xlsx docs/downloads/photo-urls.xlsx \
+            --csv docs/downloads/photo-urls.csv
+
+      - name: Publish the URL list first
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/catalog.json docs/downloads
+          if git diff --cached --quiet; then
+            echo "URL directory already current."
+          else
+            git commit -m "Reserve URLs for ${{ steps.release.outputs.tag }}"
+            git push
+          fi
+
+      - name: Load images into their reserved URLs
         run: |
           mkdir -p /tmp/studio-originals
           python tools/import_release.py \
@@ -66,7 +90,7 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --originals-dir /tmp/studio-originals
 
-      - name: Give every original image its own URL
+      - name: Upload every original to its reserved URL
         shell: bash
         run: |
           find /tmp/studio-originals -maxdepth 1 -type f -print0 | \
@@ -81,11 +105,9 @@ jobs:
             --xlsx docs/downloads/photo-urls.xlsx \
             --csv docs/downloads/photo-urls.csv
 
-      - name: Publish the updated gallery source
+      - name: Publish previews and completed dimensions
         shell: bash
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data docs/thumbnails docs/downloads
           if git diff --cached --quiet; then
             echo "No gallery changes detected."
