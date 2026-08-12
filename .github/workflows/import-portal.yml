@@ -1,0 +1,53 @@
+name: Collect uploads from portal
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: collect-upload-portal
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      UPLOAD_PORTAL: https://studio-background-upload.yxyx.chatgpt.site
+    steps:
+      - name: Create releases from queued ZIP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          queue_file="$(mktemp)"
+          curl --fail --silent --show-error --retry 3 \
+            "$UPLOAD_PORTAL/api/queue" > "$queue_file"
+
+          jq -c '.uploads[]' "$queue_file" | while IFS= read -r upload; do
+            tag="$(jq -r '.tag' <<<"$upload")"
+            name="$(jq -r '.name' <<<"$upload")"
+            download_url="$(jq -r '.downloadUrl' <<<"$upload")"
+
+            if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              echo "Release $tag already exists; skipping."
+              continue
+            fi
+
+            work_dir="$(mktemp -d)"
+            archive="$work_dir/$name"
+            curl --fail --location --silent --show-error --retry 3 \
+              --output "$archive" "$download_url"
+            gh release create "$tag" "$archive" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$name" \
+              --notes "Uploaded through the Studio Background secure portal."
+            gh workflow run import-release.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main \
+              -f "release_tag=$tag"
+          done
