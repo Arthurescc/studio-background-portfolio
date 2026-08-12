@@ -13,7 +13,7 @@
 
 ## 管理员：上传新素材
 
-在线管理员入口：[GitHub Release 上传页](https://github.com/Arthurescc/studio-background-portfolio/releases/new)。上传只使用 GitHub 账号和仓库写入权限，不经过 ChatGPT 登录或地区校验。
+在线管理员入口：[GitHub Release 大文件上传页](https://github.com/Arthurescc/studio-background-portfolio/releases/new)。请勿使用仓库首页的 `Add file → Upload files`（浏览器单文件仅 25 MiB）；ZIP 必须从 Release 页面上传。上传只使用 GitHub 账号和仓库写入权限，不经过 ChatGPT 登录或地区校验。
 
 1. 登录 GitHub，打开 Release 上传页。
 2. 创建批次标签和标题，选择一个或多个 `.zip` 文件并发布。
