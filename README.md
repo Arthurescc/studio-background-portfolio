@@ -13,13 +13,12 @@
 
 ## 管理员：上传新素材
 
-在线管理员入口：[安全上传台](https://studio-background-upload.yxyx.chatgpt.site/)。登录已授权账号后，可直接选择或拖入一个或多个 ZIP；不在网页或仓库中保存自设密码。
+在线管理员入口：[GitHub Release 上传页](https://github.com/Arthurescc/studio-background-portfolio/releases/new)。上传只使用 GitHub 账号和仓库写入权限，不经过 ChatGPT 登录或地区校验。
 
-1. 打开安全上传台并登录已授权账号。
-2. 选择或拖入一个或多个 `.zip` 文件，等待显示“已进入自动处理队列”。
-3. 仓库每 5 分钟自动收取新素材包并创建 Release。
-4. 自动化程序先读取 ZIP 内的 JPG、JPEG、PNG 和 WebP 文件名，为每张图预分配固定 URL，并优先发布 Excel/CSV 清单。
-5. 随后原图、尺寸和轻量预览会载入这些已分配 URL；地址不会因处理顺序改变。
+1. 登录 GitHub，打开 Release 上传页。
+2. 创建批次标签和标题，选择一个或多个 `.zip` 文件并发布。
+3. 自动化程序立即读取 ZIP 内的 JPG、JPEG、PNG 和 WebP 文件名，为每张图预分配固定 URL，并优先发布 Excel/CSV 清单。
+4. 随后原图、尺寸和轻量预览会载入这些已分配 URL；地址不会因处理顺序改变。
 
 建议按主题拆包，例如：
 
