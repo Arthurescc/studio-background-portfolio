@@ -135,6 +135,7 @@ def process_archive(
                     "archiveName": zip_path.name,
                     "archiveUrl": asset_url,
                     "releaseTag": tag,
+                    "status": "ready",
                 }
             )
 
@@ -145,6 +146,7 @@ def process_archive(
         "archiveName": zip_path.name,
         "archiveUrl": asset_url,
         "releaseTag": tag,
+        "status": "ready",
     }
     return batch, assets
 
