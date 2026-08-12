@@ -9,6 +9,7 @@
 - 在线图库：启用 GitHub Pages 后显示在仓库首页右侧的 **Deployments** / **Pages** 链接中。
 - 整批下载：进入 [Releases](../../releases)，选择对应批次并下载 ZIP。
 - 每张预览卡片都有独立原图下载 URL，同时提供所属批次的完整 ZIP 下载入口。
+- URL 表格：在线图库提供自动更新的 Excel 和 CSV，逐行记录每张图片的独立 URL 与批次信息。
 
 ## 管理员：上传新素材
 
