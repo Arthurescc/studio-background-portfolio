@@ -92,8 +92,8 @@ async function boot() {
     const response = await fetch(`./data/catalog.json?v=${Date.now()}`);
     if (!response.ok) throw new Error("catalog unavailable");
     const catalog = await response.json();
-    state.assets = catalog.assets || [];
-    state.batches = catalog.batches || [];
+    state.assets = (catalog.assets || []).filter((asset) => asset.status !== "reserved" && asset.thumbnail);
+    state.batches = (catalog.batches || []).filter((batch) => batch.status !== "indexing");
     state.shown = state.pageSize;
 
     $("#assetCount").textContent = state.assets.length.toLocaleString();
