@@ -4,6 +4,12 @@
 
 本仓库采用“**GitHub Releases 保存原始压缩包和独立原图 + GitHub Pages 自动生成可视化图库**”的结构。上传 ZIP 后，自动化程序会解压并把每张原图发布为独立 Release Asset，因此每张图片都有自己的稳定下载 URL；原 ZIP 同时保留，方便整批下载。
 
+## 已预登记的 15,000 张照片
+
+`1.jpg` 到 `15000.jpg` 已提前分配固定 URL。上传时创建标签为 **`photos-1-15000`** 的 Release，可放入一个或多个 ZIP；ZIP 内图片按文件名匹配：`1.jpg` 对应 `photo-00001.jpg`，`15000.jpg` 对应 `photo-15000.jpg`。可以分批放在不同 ZIP 中，但数字文件名不能重复，且只匹配 JPG。
+
+预登记 URL 清单：在线图库中的“下载 Excel / CSV”按钮会提供 15,000 行完整表格；图片尚未上传时 URL 已固定，上传成功后会在原地址直接可用。
+
 ## 如何浏览和下载
 
 - 在线图库：启用 GitHub Pages 后显示在仓库首页右侧的 **Deployments** / **Pages** 链接中。
@@ -16,27 +22,17 @@
 在线管理员入口：[GitHub Release 大文件上传页](https://github.com/Arthurescc/studio-background-portfolio/releases/new)。请勿使用仓库首页的 `Add file → Upload files`（浏览器单文件仅 25 MiB）；ZIP 必须从 Release 页面上传。上传只使用 GitHub 账号和仓库写入权限，不经过 ChatGPT 登录或地区校验。
 
 1. 登录 GitHub，打开 Release 上传页。
-2. 创建批次标签和标题，选择一个或多个 `.zip` 文件并发布。
-3. 自动化程序立即读取 ZIP 内的 JPG、JPEG、PNG 和 WebP 文件名，为每张图预分配固定 URL，并优先发布 Excel/CSV 清单。
-4. 随后原图、尺寸和轻量预览会载入这些已分配 URL；地址不会因处理顺序改变。
-
-建议按主题拆包，例如：
-
-```text
-minimal-podiums-001.zip
-natural-light-studios-001.zip
-fabric-backgrounds-001.zip
-stone-and-wood-scenes-001.zip
-```
+2. 对预登记的 15,000 张图片，标签必须填写 `photos-1-15000`；标题可自定。
+3. 选择一个或多个包含 `1.jpg`—`15000.jpg` 的 ZIP 并发布。
+4. 自动化程序优先保留预登记 URL，然后按数字文件名载入原图、尺寸和轻量预览；地址不会改变。
 
 ## 压缩包规范
 
-- 支持：`.jpg`、`.jpeg`、`.png`、`.webp`
-- 可以包含多层文件夹，系统会自动扫描。
-- 文件名尽量使用英文、数字、连字符和下划线。
+- 预登记批次只匹配 `.jpg`，文件名必须是 `1.jpg` 到 `15000.jpg`。
+- 可以包含多层文件夹，系统会按最末级文件名匹配。
+- 可以拆成多个 ZIP；不同 ZIP 之间不得出现同一个数字文件名。
 - 不要放入密码保护压缩包、可执行文件或与素材无关的文件。
-- 每个 Release 建议放 500–1000 张；更大的图库拆成多个批次能缩短自动处理时间，也方便用户按主题下载。
-- 同一批次如需重新处理，可在 Actions 中手动运行导入任务；相同文件会覆盖，不会重复创建。
+- 重新处理同一 Release 时，相同原图地址会覆盖，不会重新分配。
 
 ## 为什么不直接提交所有原图
 
