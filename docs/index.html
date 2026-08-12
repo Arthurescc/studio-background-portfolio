@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="免费开放的摄影棚背景素材库，支持按批次浏览和整包下载。" />
+    <title>Studio Background Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="返回顶部">
+        <span class="brand-mark">S</span>
+        <span>Studio Background Library</span>
+      </a>
+      <nav>
+        <a href="#gallery">浏览素材</a>
+        <a id="releasesLink" href="#">批次下载</a>
+        <a id="repoLink" class="nav-cta" href="#">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">OPEN VISUAL RESOURCE · 公益开放素材</p>
+          <h1>给创作留一块<br /><em>干净的背景。</em></h1>
+          <p class="hero-lead">免费的摄影棚背景与产品展示场景。在线预览、快速检索、按批次整包下载。</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#gallery">开始浏览</a>
+            <a id="heroDownload" class="button secondary" href="#">下载全部批次</a>
+          </div>
+        </div>
+        <div class="hero-panel" aria-label="素材库数据">
+          <span class="panel-label">LIBRARY STATUS</span>
+          <div class="stat"><strong id="assetCount">0</strong><span>张可预览素材</span></div>
+          <div class="stat"><strong id="batchCount">0</strong><span>个开放批次</span></div>
+          <div class="panel-note"><i></i> CC BY 4.0 · 持续更新</div>
+        </div>
+      </section>
+
+      <section class="toolbar" id="gallery">
+        <div>
+          <p class="section-kicker">THE COLLECTION</p>
+          <h2>素材目录</h2>
+        </div>
+        <div class="controls">
+          <label class="search">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="搜索文件名或批次…" autocomplete="off" />
+          </label>
+          <select id="batchSelect" aria-label="筛选批次">
+            <option value="all">全部批次</option>
+          </select>
+        </div>
+      </section>
+
+      <div id="batchStrip" class="batch-strip" aria-label="批次快速筛选"></div>
+      <section id="galleryGrid" class="gallery-grid" aria-live="polite"></section>
+      <div id="emptyState" class="empty" hidden>
+        <span>∅</span>
+        <h3>还没有匹配的素材</h3>
+        <p>换一个关键词或批次试试。</p>
+      </div>
+      <button id="loadMore" class="load-more" hidden>继续加载</button>
+    </main>
+
+    <footer>
+      <div>
+        <span class="brand-mark small">S</span>
+        <p>开放、易用、持续整理的摄影棚背景素材库。</p>
+      </div>
+      <p>CC BY 4.0 · Built openly on GitHub</p>
+    </footer>
+
+    <template id="cardTemplate">
+      <article class="card">
+        <a class="image-link" href="#" target="_blank" rel="noopener">
+          <img loading="lazy" alt="" />
+          <span class="image-overlay">下载这张原图 ↗</span>
+        </a>
+        <div class="card-meta">
+          <h3></h3>
+          <p></p>
+          <div class="card-actions">
+            <a class="download-image" href="#" target="_blank" rel="noopener">单张原图</a>
+            <a class="download-pack" href="#" target="_blank" rel="noopener">整包 ZIP</a>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
