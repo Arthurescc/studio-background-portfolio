@@ -1,4 +1,5 @@
 name: Deploy gallery to GitHub Pages
+# Also publishes the pre-registered Excel and CSV URL indexes.
 
 on:
   push:
