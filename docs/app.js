@@ -41,6 +41,13 @@ function render() {
     grid.append(card);
   });
 
+  if (state.assets.length === 0) {
+    empty.querySelector("h3").textContent = "首批素材待发布";
+    empty.querySelector("p").textContent = "发布第一个 ZIP Release 后，原图与预览会自动出现在这里。";
+  } else {
+    empty.querySelector("h3").textContent = "还没有匹配的素材";
+    empty.querySelector("p").textContent = "换一个关键词或批次试试。";
+  }
   empty.hidden = items.length !== 0;
   loadMore.hidden = visible.length >= items.length || items.length === 0;
 }
