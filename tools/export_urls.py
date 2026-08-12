@@ -28,7 +28,7 @@ def asset_rows(catalog: dict) -> list[list[object]]:
     return [
         [
             index,
-            asset.get("title") or asset.get("originalName") or "",
+            Path(asset.get("sourcePath") or asset.get("originalName") or asset.get("title") or "").name,
             asset.get("originalUrl") or "",
             asset.get("batchName") or "",
             asset.get("archiveUrl") or "",
@@ -139,4 +139,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
