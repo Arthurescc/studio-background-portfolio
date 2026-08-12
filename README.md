@@ -13,6 +13,8 @@
 
 ## 管理员：上传新素材
 
+在线管理员入口：[Upload new assets](https://arthurescc.github.io/studio-background-portfolio/upload.html)。该页面使用 GitHub 身份权限，不在网页或仓库中保存额外账号密码。
+
 1. 打开仓库的 **Releases** 页面，点击 **Draft a new release**。
 2. 新建标签，例如 `batch-2026-08-stone`。
 3. 标题填写清晰的英文或中文批次名。
