@@ -58,11 +58,16 @@ jobs:
             --dir /tmp/studio-release
 
       - name: Reserve every image URL from ZIP filenames
+        shell: bash
         run: |
-          python tools/preallocate_urls.py \
-            --input-dir /tmp/studio-release \
-            --tag "${{ steps.release.outputs.tag }}" \
-            --repo "$GITHUB_REPOSITORY"
+          if [[ "${{ steps.release.outputs.tag }}" == "photos-1-15000" ]]; then
+            python tools/reserve_numeric_library.py --repo "$GITHUB_REPOSITORY"
+          else
+            python tools/preallocate_urls.py \
+              --input-dir /tmp/studio-release \
+              --tag "${{ steps.release.outputs.tag }}" \
+              --repo "$GITHUB_REPOSITORY"
+          fi
           python tools/export_urls.py \
             --catalog docs/data/catalog.json \
             --xlsx docs/downloads/photo-urls.xlsx \
@@ -82,13 +87,22 @@ jobs:
           fi
 
       - name: Load images into their reserved URLs
+        shell: bash
         run: |
           mkdir -p /tmp/studio-originals
-          python tools/import_release.py \
-            --input-dir /tmp/studio-release \
-            --tag "${{ steps.release.outputs.tag }}" \
-            --repo "$GITHUB_REPOSITORY" \
-            --originals-dir /tmp/studio-originals
+          if [[ "${{ steps.release.outputs.tag }}" == "photos-1-15000" ]]; then
+            python tools/import_reserved_numeric.py \
+              --input-dir /tmp/studio-release \
+              --tag "${{ steps.release.outputs.tag }}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --originals-dir /tmp/studio-originals
+          else
+            python tools/import_release.py \
+              --input-dir /tmp/studio-release \
+              --tag "${{ steps.release.outputs.tag }}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --originals-dir /tmp/studio-originals
+          fi
 
       - name: Upload every original to its reserved URL
         shell: bash
@@ -108,6 +122,7 @@ jobs:
       - name: Publish previews and completed dimensions
         shell: bash
         run: |
+          git pull --rebase
           git add docs/data docs/thumbnails docs/downloads
           if git diff --cached --quiet; then
             echo "No gallery changes detected."
