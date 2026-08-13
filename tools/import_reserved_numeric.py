@@ -106,7 +106,10 @@ def main() -> int:
                         "height": height,
                         "thumbnail": f"./thumbnails/{BATCH_ID}/{thumb_name}",
                         "originalName": f"{number}.jpg",
-                        "originalUrl": archive_url,
+                        "originalUrl": (
+                            f"https://{args.repo.split('/', 1)[0].lower()}.github.io/"
+                            f"{args.repo.split('/', 1)[1]}/thumbnails/{BATCH_ID}/{thumb_name}"
+                        ),
                         "archiveName": zip_path.name,
                         "archiveUrl": archive_url,
                         "releaseTag": args.tag,
