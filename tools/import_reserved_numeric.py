@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import shutil
 import sys
 import zipfile
 from datetime import datetime, timezone
@@ -30,11 +29,14 @@ def main() -> int:
     parser.add_argument("--tag", required=True)
     parser.add_argument("--repo", required=True)
     parser.add_argument("--docs-dir", default="docs", type=Path)
-    parser.add_argument("--originals-dir", required=True, type=Path)
+    parser.add_argument("--start", type=int, default=1)
+    parser.add_argument("--end", type=int, default=MAX_NUMBER)
     args = parser.parse_args()
 
     if args.tag != BATCH_ID:
         raise SystemExit(f"This reserved import must use release tag {BATCH_ID}")
+    if not 1 <= args.start <= args.end <= MAX_NUMBER:
+        raise SystemExit(f"range must be within 1..{MAX_NUMBER}")
 
     archives = sorted(args.input_dir.glob("*.zip"))
     if not archives:
@@ -46,7 +48,6 @@ def main() -> int:
     if len(assets) != MAX_NUMBER:
         raise SystemExit("The 15,000-item reservation catalog is missing; run reserve_numeric_library.py first")
 
-    args.originals_dir.mkdir(parents=True, exist_ok=True)
     thumb_dir = args.docs_dir / "thumbnails" / BATCH_ID
     thumb_dir.mkdir(parents=True, exist_ok=True)
     seen: set[int] = set()
@@ -65,7 +66,7 @@ def main() -> int:
                     print(f"Ignoring non-reserved filename: {info.filename}", file=sys.stderr)
                     continue
                 number = int(match.group(1))
-                if number > MAX_NUMBER:
+                if number > MAX_NUMBER or not args.start <= number <= args.end:
                     print(f"Ignoring out-of-range filename: {info.filename}", file=sys.stderr)
                     continue
                 if number in seen:
@@ -73,14 +74,10 @@ def main() -> int:
                 seen.add(number)
 
                 asset_id = f"{BATCH_ID}-{number:05d}"
-                original_name = f"photo-{number:05d}.jpg"
-                original_path = args.originals_dir / original_name
                 thumb_name = f"{number:05d}.webp"
                 thumb_path = thumb_dir / thumb_name
                 try:
-                    with archive.open(info) as source, original_path.open("wb") as target:
-                        shutil.copyfileobj(source, target, length=1024 * 1024)
-                    with Image.open(original_path) as raw:
+                    with archive.open(info) as source, Image.open(source) as raw:
                         image = ImageOps.exif_transpose(raw)
                         width, height = image.size
                         if width < 2 or height < 2:
@@ -96,7 +93,6 @@ def main() -> int:
                             image = image.convert("RGB")
                         image.save(thumb_path, "WEBP", quality=76, method=6)
                 except (UnidentifiedImageError, OSError, ValueError) as error:
-                    original_path.unlink(missing_ok=True)
                     thumb_path.unlink(missing_ok=True)
                     print(f"Skipping unreadable image {info.filename}: {error}", file=sys.stderr)
                     continue
@@ -109,11 +105,8 @@ def main() -> int:
                         "width": width,
                         "height": height,
                         "thumbnail": f"./thumbnails/{BATCH_ID}/{thumb_name}",
-                        "originalName": original_name,
-                        "originalUrl": (
-                            f"https://github.com/{args.repo}/releases/download/"
-                            f"{quote(args.tag, safe='')}/{quote(original_name)}"
-                        ),
+                        "originalName": f"{number}.jpg",
+                        "originalUrl": archive_url,
                         "archiveName": zip_path.name,
                         "archiveUrl": archive_url,
                         "releaseTag": args.tag,

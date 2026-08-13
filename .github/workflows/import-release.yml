@@ -9,6 +9,16 @@ on:
         description: Existing release tag to import again
         required: true
         type: string
+      range_start:
+        description: First numeric JPG to import (optional)
+        required: false
+        default: "1"
+        type: string
+      range_end:
+        description: Last numeric JPG to import (optional)
+        required: false
+        default: "15000"
+        type: string
 
 permissions:
   contents: write
@@ -51,10 +61,24 @@ jobs:
         shell: bash
         run: |
           mkdir -p /tmp/studio-release
-          gh release download "${{ steps.release.outputs.tag }}" \
-            --repo "$GITHUB_REPOSITORY" \
-            --pattern '*.zip' \
-            --dir /tmp/studio-release
+          if [[ "${{ steps.release.outputs.tag }}" == "photos-1-15000" ]]; then
+            start="${{ inputs.range_start || '1' }}"
+            end="${{ inputs.range_end || '15000' }}"
+            for lower in $(seq "$start" 500 "$end"); do
+              upper=$((lower + 499))
+              [[ "$upper" -gt "$end" ]] && upper="$end"
+              archive="${lower}-${upper}.zip"
+              gh release download "${{ steps.release.outputs.tag }}" \
+                --repo "$GITHUB_REPOSITORY" \
+                --pattern "$archive" \
+                --dir /tmp/studio-release
+            done
+          else
+            gh release download "${{ steps.release.outputs.tag }}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --pattern '*.zip' \
+              --dir /tmp/studio-release
+          fi
 
       - name: Reserve every image URL from ZIP filenames
         shell: bash
@@ -85,16 +109,16 @@ jobs:
             git push
           fi
 
-      - name: Load images into their reserved URLs
+      - name: Load images and build previews
         shell: bash
         run: |
-          mkdir -p /tmp/studio-originals
           if [[ "${{ steps.release.outputs.tag }}" == "photos-1-15000" ]]; then
             python tools/import_reserved_numeric.py \
               --input-dir /tmp/studio-release \
               --tag "${{ steps.release.outputs.tag }}" \
               --repo "$GITHUB_REPOSITORY" \
-              --originals-dir /tmp/studio-originals
+              --start "${{ inputs.range_start || '1' }}" \
+              --end "${{ inputs.range_end || '15000' }}"
           else
             python tools/import_release.py \
               --input-dir /tmp/studio-release \
