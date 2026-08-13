@@ -18,7 +18,7 @@ from import_release import safe_image_members
 
 
 BATCH_ID = "photos-1-15000"
-BATCH_NAME = "1.jpg–15000.jpg 预登记"
+BATCH_NAME = "Studio Background Collection"
 MAX_NUMBER = 15_000
 NUMERIC_JPG = re.compile(r"^([1-9][0-9]{0,4})\.jpg$", re.IGNORECASE)
 

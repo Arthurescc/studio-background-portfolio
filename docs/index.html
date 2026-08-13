@@ -79,20 +79,24 @@
 
     <template id="cardTemplate">
       <article class="card">
-        <a class="image-link" href="#" target="_blank" rel="noopener">
+        <button class="image-link" type="button">
           <img loading="lazy" alt="" />
-          <span class="image-overlay">下载这张原图 ↗</span>
-        </a>
+          <span class="image-overlay">查看图片</span>
+        </button>
         <div class="card-meta">
           <h3></h3>
           <p></p>
-          <div class="card-actions">
-            <a class="download-image" href="#" target="_blank" rel="noopener">单张原图</a>
-            <a class="download-pack" href="#" target="_blank" rel="noopener">整包 ZIP</a>
-          </div>
         </div>
       </article>
     </template>
+
+    <dialog id="previewDialog" class="preview-dialog" aria-labelledby="previewTitle">
+      <div class="preview-frame">
+        <button id="closePreview" class="close-preview" type="button" aria-label="关闭预览">×</button>
+        <img id="previewImage" alt="" />
+        <p id="previewTitle"></p>
+      </div>
+    </dialog>
 
     <script src="./app.js" defer></script>
   </body>

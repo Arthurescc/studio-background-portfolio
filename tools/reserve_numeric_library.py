@@ -11,7 +11,7 @@ from urllib.parse import quote
 
 
 BATCH_ID = "photos-1-15000"
-BATCH_NAME = "1.jpg–15000.jpg 预登记"
+BATCH_NAME = "Studio Background Collection"
 DEFAULT_COUNT = 15_000
 
 

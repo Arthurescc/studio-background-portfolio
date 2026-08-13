@@ -12,6 +12,16 @@ const grid = $("#galleryGrid");
 const empty = $("#emptyState");
 const loadMore = $("#loadMore");
 const template = $("#cardTemplate");
+const previewDialog = $("#previewDialog");
+const previewImage = $("#previewImage");
+const previewTitle = $("#previewTitle");
+
+function openPreview(asset) {
+  previewImage.src = asset.thumbnail;
+  previewImage.alt = asset.title;
+  previewTitle.textContent = asset.title;
+  previewDialog.showModal();
+}
 
 function filteredAssets() {
   const needle = state.query.trim().toLowerCase();
@@ -29,15 +39,14 @@ function render() {
 
   visible.forEach((asset) => {
     const card = template.content.cloneNode(true);
-    const link = card.querySelector("a");
+    const link = card.querySelector(".image-link");
     const image = card.querySelector("img");
-    link.href = asset.originalUrl;
     image.src = asset.thumbnail;
     image.alt = asset.title;
+    link.setAttribute("aria-label", `查看 ${asset.title}`);
+    link.addEventListener("click", () => openPreview(asset));
     card.querySelector("h3").textContent = asset.title;
-    card.querySelector("p").textContent = `${asset.batchName} · ${asset.width}×${asset.height}`;
-    card.querySelector(".download-image").href = asset.originalUrl;
-    card.querySelector(".download-pack").href = asset.archiveUrl;
+    card.querySelector("p").textContent = `${asset.width} × ${asset.height}`;
     grid.append(card);
   });
 
@@ -121,6 +130,11 @@ $("#batchSelect").addEventListener("change", (event) => setBatch(event.target.va
 loadMore.addEventListener("click", () => {
   state.shown += state.pageSize;
   render();
+});
+
+$("#closePreview").addEventListener("click", () => previewDialog.close());
+previewDialog.addEventListener("click", (event) => {
+  if (event.target === previewDialog) previewDialog.close();
 });
 
 boot();
