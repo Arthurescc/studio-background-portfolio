@@ -137,7 +137,6 @@ jobs:
       - name: Publish previews and completed dimensions
         shell: bash
         run: |
-          git pull --rebase
           git add docs/data docs/thumbnails docs/downloads
           if git diff --cached --quiet; then
             echo "No gallery changes detected."
