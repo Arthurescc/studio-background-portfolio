@@ -47,6 +47,10 @@ function render() {
     link.addEventListener("click", () => openPreview(asset));
     card.querySelector("h3").textContent = asset.title;
     card.querySelector("p").textContent = `${asset.width} × ${asset.height}`;
+    const download = card.querySelector(".download-image");
+    download.href = asset.originalUrl;
+    download.download = asset.originalName;
+    download.setAttribute("aria-label", `下载 ${asset.title}`);
     grid.append(card);
   });
 
